@@ -1,0 +1,63 @@
+---
+- name: Add Volcano Helm repository
+  ansible.builtin.command:
+    cmd: helm repo add {{ volcano.helm_repo_name }} {{ volcano.helm_repo_url }}
+
+- name: Update Helm repositories cache
+  command: helm repo update
+
+- name: Get Kube API resources
+  command: kubectl api-resources --verbs=list --namespaced -o name
+  register: api_resources
+
+- name: Check if the current cluster is OpenShift
+  set_fact:
+    is_openshift: "{{ 'routes.route.openshift.io' in api_resources.stdout_lines }}"
+
+- name: OpenShift - Prepare RBAC to use hostmount-anyuid SCC
+  ansible.builtin.template:
+    src: volcano-oc-rbac.yaml.j2
+    dest: volcano-oc-rbac.yaml
+  when: is_openshift 
+
+- name: OpenShift - apply RBAC to use hostmount-anyuid SCC
+  command: kubectl apply -f volcano-oc-rbac.yaml
+  when: is_openshift 
+
+- name: Install Volcano Helm chart in Kubernetes cluster
+  shell: |
+    helm upgrade --install {{ volcano.helm_repo_name }} {{ volcano.chart_name }} \
+      --namespace {{ namespace }} \
+      --version {{ volcano.chart_version }}
+
+- name: Wait for Volcano deployments to be available
+  command: kubectl rollout status deployment/{{ item }} -n {{ namespace }} --timeout=300s
+  loop:
+    - volcano-scheduler
+    - volcano-admission
+    - volcano-controllers
+  register: rollout_status
+  retries: 5
+  delay: 10
+  until: rollout_status.rc == 0
+
+- name: Run Volcano Job if validation is enabled
+  block:
+    - name: Template values file
+      ansible.builtin.template:
+        src: volcano-job.yaml.j2
+        dest: volcano-job.yaml
+
+    - name: Submit Sample Volcano Job
+      shell: kubectl apply -f volcano-job.yaml -n {{ namespace }}; sleep 30
+
+    - name: Volcano Job logs
+      command: kubectl logs -n {{ namespace }} -l volcano.sh/job-name=volcano-test-job
+      register: job_logs
+
+    - name: Volcano Job Verification
+      debug:
+        msg: "Volcano Job completed successfully"
+      when: "{{ 'Volcano!' in job_logs.stdout }}"
+
+  when: volcano.validate | default(false) | bool

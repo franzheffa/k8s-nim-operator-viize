@@ -1,0 +1,59 @@
+- hosts: localhost
+  vars_files:
+    - values.yaml
+  tasks:
+    - name: Uninstall customizer
+      include_role:
+        name: customizer
+        tasks_from: uninstall.yaml  
+      vars:
+        namespace: "{{ installation_namespace }}"
+      when: uninstall.customizer == true
+
+- hosts: localhost
+  vars_files:
+    - values.yaml
+  tasks:
+    - name: Uninstall datastore
+      include_role:
+        name: datastore
+        tasks_from: uninstall.yaml  
+      vars:
+        namespace: "{{ installation_namespace }}"
+      when: uninstall.datastore == true
+
+- hosts: localhost
+  vars_files:
+    - values.yaml
+  tasks:
+    - name: Uninstall entity-store
+      include_role:
+        name: entity-store
+        tasks_from: uninstall.yaml  
+      vars:
+        namespace: "{{ installation_namespace }}"
+      when: uninstall.entity_store == true
+
+- hosts: localhost
+  vars_files:
+    - values.yaml
+  tasks:
+    - name: Uninstall Evaluator
+      include_role:
+        name: evaluator
+        tasks_from: uninstall.yaml  
+      vars:
+        namespace: "{{ installation_namespace }}"
+      when: uninstall.evaluator == true
+
+- hosts: localhost
+  vars_files:
+    - values.yaml
+  tasks:
+    - name: Uninstall Jupyter Server
+      include_role:
+        name: jupyter
+        tasks_from: uninstall.yaml  
+      vars:
+        namespace: "{{ installation_namespace }}"
+      when: uninstall.jupyter == true

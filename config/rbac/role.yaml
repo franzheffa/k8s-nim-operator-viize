@@ -1,0 +1,287 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: manager-role
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  - endpoints
+  - persistentvolumeclaims
+  - pods
+  - pods/eviction
+  - secrets
+  - serviceaccounts
+  - services
+  - services/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - nodes
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - pods/log
+  verbs:
+  - get
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  - statefulsets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps.nvidia.com
+  resources:
+  - nemocustomizers
+  - nemodatastores
+  - nemoentitystores
+  - nemoevaluators
+  - nemoguardrails
+  - nimcaches
+  - nimpipelines
+  - nimservices
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps.nvidia.com
+  resources:
+  - nemocustomizers/finalizers
+  - nemodatastores/finalizers
+  - nemoentitystores/finalizers
+  - nemoevaluators/finalizers
+  - nemoguardrails/finalizers
+  - nimcaches/finalizers
+  - nimpipelines/finalizers
+  - nimservices/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - apps.nvidia.com
+  resources:
+  - nemocustomizers/status
+  - nemodatastores/status
+  - nemoentitystores/status
+  - nemoevaluators/status
+  - nemoguardrails/status
+  - nimcaches/status
+  - nimpipelines/status
+  - nimservices/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - autoscaling
+  resources:
+  - horizontalpodautoscalars
+  - horizontalpodautoscalers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - batch
+  resources:
+  - jobs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - batch.volcano.sh
+  resources:
+  - jobs
+  - jobs/status
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - config.openshift.io
+  resources:
+  - clusterversions
+  - proxies
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - monitoring.coreos.com
+  resources:
+  - prometheusrules
+  - servicemonitors
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - networking.k8s.io
+  resources:
+  - ingresses
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - nodeinfo.volcano.sh
+  resources:
+  - numatopologies
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - nvidia.com
+  resources:
+  - nemoentityhandlers
+  - nemotrainingjobs
+  - nemotrainingjobs/status
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - rolebindings
+  - roles
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - route.openshift.io
+  resources:
+  - routes
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - run.ai
+  resources:
+  - runaijobs
+  - trainingworkloads
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - scheduling.incubator.k8s.io
+  - scheduling.volcano.sh
+  resources:
+  - podgroups
+  - queues
+  - queues/status
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - scheduling.k8s.io
+  resources:
+  - priorityclasses
+  verbs:
+  - create
+  - get
+  - list
+  - watch
+- apiGroups:
+  - security.openshift.io
+  resources:
+  - securitycontextconstraints
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - security.openshift.io
+  resourceNames:
+  - nonroot
+  resources:
+  - securitycontextconstraints
+  verbs:
+  - use
+- apiGroups:
+  - storage.k8s.io
+  resources:
+  - storageclasses
+  verbs:
+  - get
+  - list
+  - watch

@@ -1,0 +1,32 @@
+resources:
+# All RBAC will be applied under this service account in
+# the deployment namespace. You may comment out this resource
+# if your manager will use a service account that exists at
+# runtime. Be sure to update RoleBinding and ClusterRoleBinding
+# subjects if changing service account names.
+- service_account.yaml
+- role.yaml
+- role_binding.yaml
+- leader_election_role.yaml
+- leader_election_role_binding.yaml
+# For each CRD, "Editor" and "Viewer" roles are scaffolded by
+# default, aiding admins in cluster management. Those roles are
+# not used by the Project itself. You can comment the following lines
+# if you do not want those helpers be installed with your Project.
+- nemocustomizer_editor_role.yaml
+- nemocustomizer_viewer_role.yaml
+- nemoentitystore_editor_role.yaml
+- nemoentitystore_viewer_role.yaml
+- nemodatastore_editor_role.yaml
+- nemodatastore_viewer_role.yaml
+- nemoevaluator_editor_role.yaml
+- nemoevaluator_viewer_role.yaml
+- nemoguardrails_editor_role.yaml
+- nemoguardrails_viewer_role.yaml
+- nimpipeline_editor_role.yaml
+- nimpipeline_viewer_role.yaml
+- nimcache_editor_role.yaml
+- nimcache_viewer_role.yaml
+- nimservice_editor_role.yaml
+- nimservice_viewer_role.yaml
+
